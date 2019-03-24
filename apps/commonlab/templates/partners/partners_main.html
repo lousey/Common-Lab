@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load url from future %}
+
+{% block meta_keywords %}partners partnerships{% endblock %}
+{% block title_suffix %}| Partnerships {% endblock %}
+
+{% block main_content_class %}shell{% endblock %}
+
+{% block main_content %}
+<p id="partner_copy" class="display_copy_font">Common Lab isn't in the field of competition, we're in the mood for collaboration.
+We want to join forces with those that share the same passions we do, and make
+something happen, damnit. These are the people that make up our DNA.</p>
+
+{% for partner in object_list.all %}
+<a href="{{ partner.site_url }}" rel="external" class="partner_link {% cycle '' '' 'omega' %}">
+	<img src="{{ partner.image.url }}" alt="{{ partner.alt_display }}"/>
+	<p><em>{{ partner.name }}</em> {{ partner.description }}</p>
+	<span id="partner_link_icon"></span>
+</a>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'projects/project_detail_base.html' %}
+
+{% block section_content %}
+<div class="project_content">
+	<img id="project_impact_image" src="{{ section.projectimpactlocationimage.image.url }}"
+		alt="{{ section.projectimpactlocationimage.alt_display }}"/>
+	{% for item in section.items.all %}
+		{% if item.as_leaf_class.is_statistic %}
+			<div class="project_statistic">
+				<h1>{{ item.as_leaf_class.number }}</h1>
+				<p>{{ item.as_leaf_class.description }}</p>
+			</div>
+		{% else %}
+			<div class="project_quote{% if item.as_leaf_class.number_of_grids = 2 %} project_long_quote{% endif %}">
+				{{ item.as_leaf_class.quote }}
+				<p>{{ item.as_leaf_class.source }}</p>
+			</div>
+		{% endif %}
+	{% endfor %}
+</div>
+{% endblock %}

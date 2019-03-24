@@ -1,0 +1,23 @@
+from commonlab.models import *
+from django.contrib import admin
+
+class ProjectImageInline(admin.StackedInline):
+    model = ProjectImage
+    extra = 1
+
+class ProjectStatisticInline(admin.TabularInline):
+    model = ProjectStatistic
+
+class ProjectLinkInline(admin.TabularInline):
+    model = ProjectLink
+
+class ProjectPeopleInline(admin.TabularInline):
+    model = Membership
+    extra = 1
+
+class ProjectAdmin(admin.ModelAdmin):
+    inlines= [ProjectLinkInline, ProjectStatisticInline, ProjectImageInline, ProjectPeopleInline]
+
+
+admin.site.register(Project, ProjectAdmin)
+admin.site.register(Person)

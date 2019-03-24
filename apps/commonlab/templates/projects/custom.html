@@ -1,0 +1,15 @@
+{% extends 'projects/project_detail_base.html' %}
+
+{% load tags %}
+
+{% block section_content %}
+<div class="project_content">
+	{% if section.projectsectionimage %}
+	<img id="project_custom_image" style="width: {{ section.projectsectionimage.image.width }}px"
+		src="{{ section.projectsectionimage.image.url }}" alt="{{ section.projectsectionimage.alt_display }}"/>
+	{% endif %}
+	<div id="project_custom_content" style="width: {{ section.projectsectionimage.image.width|custom_content }}px">
+		{{ section.section_html|safe }}
+	</div>
+</div>
+{% endblock %}

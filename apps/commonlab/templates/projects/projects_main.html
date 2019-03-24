@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% load url from future %}
+
+{% block meta_keywords %}projects{% endblock %}
+{% block title_suffix %}| Projects {% endblock %}
+
+{% block main_content_class %}shell{% endblock %}
+
+{% block main_content %}
+{% for project in project_list.all %}
+<a href="{% url 'projects' %}{{ project.slug }}/" rel="project_{{ project.pk }}" class="grid_link {% cycle '' '' 'omega' %}">
+	<h1>{{ project.quote|safe }}</h1>
+	<p>{{ project.name }}</p>
+	<img src="{{ project.projectimage.image.url }}" alt="{{ project.projectimage.alt_display }}"/>
+</a>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'projects/project_detail_base.html' %}
+
+{% block section_content %}
+<div class="project_content">
+	{% for item in section.items.all %}
+	{% with image=item.as_leaf_class.image %}
+	<a class="project_press {% cycle '' 'omega' %}" rel="external" href="{{ item.url }}">
+		{% if image %}
+			<img src="{{ image.url }}" alt="{{ item.as_leaf_class.alt_display }}"/><br/>
+		{% else %}
+			<em>{{ item.source }}:</em>
+		{% endif %}
+		{{ item.quote }}
+		<br/>
+		<p>{{ item.attribution }}</p><span class="icon"></span>
+	</a>
+	{% endwith %}
+	{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'projects/project_detail_base.html' %}
+
+{% block carousel %}
+{% include 'projects/includes/carousel_include.html' %}
+{% endblock %}
+	
+{% block section_js %}
+<script type="text/javascript">
+{% with medias=project.overview_medias %}
+var carousel_content = [
+	{% for media in medias %}
+		{ 	"url": "{{ media.image.url }}",
+			"alt": "{{ media.alt_display }}",
+			"caption": "{{ media.caption }}",
+			"video_html": '{{ media.video_html|safe }}'
+		}{% if not forloop.last %},{% endif %}
+	{% endfor %}
+];
+{% endwith %}
+$(document).ready(function(){
+	init_carousel(0);
+})
+</script>
+{% endblock %}
+

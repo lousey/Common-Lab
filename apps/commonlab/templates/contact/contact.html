@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+
+<div id="contact">
+<h1>Design for change</h1>
+{{ object_list.0.info_html|safe }}
+<p><a href="mailto:{{ object_list.0.email }}">{{ object_list.0.email }}</a></p>
+</div>
+
+{% endblock %}

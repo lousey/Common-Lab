@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load url from future %}
+
+{% block meta_keywords %}people{% endblock %}
+{% block title_suffix %}| People {% endblock %}
+
+{% block main_content_class %}shell{% endblock %}
+
+{% block main_content %}
+{% for person in people_list.all %}
+<a href="{% url 'people' %}{{ person.slug }}/" rel="person_{{ person.pk }}" class="grid_link people_link {% cycle '' '' '' '' '' 'omega' %}">
+	<div>
+		<h2>{{ person.quote|safe }}</h2>
+		<span>{{ person.role }}</span>
+		<p>{{ person.first_name }} {{ person.last_name }}</p>
+	</div>
+	<img src="{{ person.personimage.image.url }}" alt="{{ person.personimage.alt_display }}"/>
+</a>
+{% endfor %}
+{% endblock %}

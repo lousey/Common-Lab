@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% load url from future %}
+{% load tags %}
+{% url 'projects' as projects_url %}
+
+{% block meta_description %}{{ project.quote|safe }}{% endblock %}
+{% block meta_keywords %}{{ project.name|safe }} {{ project.parent.name|safe }}{% endblock %}
+{% block title_suffix %}| Projects - {{ project.name }}{% endblock %}
+
+{% block main_content %}
+<div id="fade_wrapper">
+
+<div id="project_detail">	
+	
+	<a href="#" class="nav_previous"></a>			
+	<h1 id="project_detail_header">{{ project.detail_title|safe }}</h1>
+	<a href="#" class="nav_next"></a>
+	
+	<div style="clear:both"><!--clearfix--></div>
+	
+	<ul id="project_detail_navigation" class="clearfix">
+		{% for section in project.sections.all %}
+		<li><a href="{{ projects_url }}{{ project.slug }}/{{ section.slug }}/">{{ section.name }}</a></li>
+		{% endfor %}
+	</ul>
+	
+	<div id="project_info_wrapper">
+		{% if project.url %}
+		<div id="project_link">
+			<span class="shadow">{{ project.url_title }}</span>
+			<a href="{{ project.url }}" rel="external">{{ project.url_title }}</a>
+		</div>
+		{% endif %}
+		<div style="clear:both"></div>
+		<div id="project_info">{{ project.info_html|safe }}</div>
+	</div>
+	
+</div>
+
+<div id="section_wrapper">
+	{% block carousel %}
+	{% endblock %}
+	<div id="positioner">
+	{% block section_content %}
+	{% endblock %}
+	</div>
+</div>
+
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#project_link").width($("#project_link > a").first().width() + 10);
+	$("#project_{{ project.pk }}").addClass("active");
+	$("#project_detail").find(".nav_previous").attr("href", "{{ projects_url }}{{ project.get_prev.slug }}/").data(
+		"name", "{{ project.get_prev.name }}");
+	$("#project_detail").find(".nav_previous").attr("rel", "{{ project.get_prev.name }}");
+	$("#project_detail").find(".nav_next").attr("href", "{{ projects_url }}{{ project.get_next.slug }}/").data(
+		"name", "{{ project.get_next.name }}");
+	$("#section_wrapper").height(Math.max($("#ajax_1").height(), 500));
+
+});
+</script>
+{% block section_js %}{% endblock %}
+{% endblock %}
+

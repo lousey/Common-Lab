@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% load url from future %}
+{% load tags %}
+
+{% block meta_description %}{{ person.quote|safe }}{% endblock %}
+{% block meta_keywords %}{{ person.name|safe }}{% endblock %}
+{% block title_suffix %}| People - {{ person.name }}{% endblock %}
+
+{% block main_content %}
+<div id="fade_wrapper">
+
+<a href="#" id="person_prev" class="nav_previous"></a>			
+<a href="#" id="person_next" class="nav_next"></a>
+
+<div id="person_detail" class="clearfix">	
+	
+<h1>{{ person.first_name }} {{ person.last_name }}</h1>
+<h3>{{ person.role }}</h3>
+
+<div id="person_detail_info">
+		<img src="{{ person.persondetailimage.image.url }}" alt="{{ person.persondetailimage.alt_display }}"/>
+		
+		<p>{{ person.bio }}</p>
+		
+		<a href="mailto:{{ person.email }}">{{ person.email }}</a>
+		{% if person.twitter_username %}
+		<a href="http://www.twitter.com/{{ person.twitter_username }}" rel="external">@{{ person.twitter_username }} on Twitter </a>
+		{% endif %}
+		{% if person.facebook_url %}
+		<a href="{{ person.facebook_url }}" rel="external">Facebook</a>
+		{% endif %}
+		{% if person.site_url %}
+		<a href="{{ person.site_url }}" rel="external">Website</a>
+		{% endif %}
+	</div>
+	
+	<div id="person_detail_questions">
+	
+		{% for question in person.questions.all %}
+		<h6>{{ question.question }}</h6>
+		<p>{{ question.answer }}</p>
+		{% endfor %}
+		
+		<form action="{{ people_url }}{{ person.slug }}/" method="post">
+		{% csrf_token %}
+		<label for="id_subject">Type a question:</label>
+		{{ form.question }}
+		<input type="submit" value="Submit" />
+		</form>
+	</div>
+		
+</div>
+
+</div>
+{% endblock %}
+
+
+
+{% block extra_js %}
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#person_{{ person.pk }}").addClass("active");
+	$("#person_prev").attr("href", "{{ people_url }}{{ person.get_prev.slug }}/").data("name", "{{ person.get_prev.first_name }} {{ person.get_prev.last_name }}");
+	$("#person_next").attr("href", "{{ people_url }}{{ person.get_next.slug }}/").data("name", "{{ person.get_next.first_name }} {{ person.get_next.last_name }}");
+	if (window.location.hash == "#submit") {
+		$("textarea").attr("value", "Thanks for submitting a question! We'll ask {{ person.first_name }}.");
+	}
+});
+</script>
+{% endblock %}
+

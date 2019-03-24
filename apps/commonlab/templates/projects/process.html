@@ -1,0 +1,79 @@
+{% extends 'projects/project_detail_base.html' %}
+
+{% block carousel %}
+{% include 'projects/includes/carousel_include.html' %}
+{% endblock %}
+	
+{% block section_content %}
+<a href="#" id="carousel_close">Close gallery</a>
+<div id="project_process">
+	<div id="project_process_content">
+		<div class="display_copy_font">{{ section.process_html|safe }}</div>
+		<br/>
+		<div class="regular_copy_font">{{ section.process_footer_html|safe }}</div>
+	</div>
+	{% with medias=project.process_medias %}{% for media in medias %}
+	{% if forloop.counter = 1 %}
+	<img rel="{{ forloop.counter }}" src="{{ media.large_url }}"/>
+	{% else %}
+	<img rel="{{ forloop.counter }}" src="{{ media.small_url }}"/>
+	{% endif %}
+	{% endfor %}{% endwith %}
+</div>
+{% endblock %}
+
+{% block section_js %}
+<script type="text/javascript">
+{% with medias=project.process_medias %}
+var carousel_content = [
+	{% for media in medias %}
+		{ 	"url": "{{ media.image.url }}",
+			"alt": "{{ media.alt_display }}",
+			"caption": "{{ media.caption }}",
+			"video_html": '{{ media.video_html|safe }}'
+		}{% if not forloop.last %},{% endif %}
+	{% endfor %}
+];
+{% endwith %}
+$(document).ready(function(){	
+	var interaction_locked = false;
+	var cw = $("#carousel_wrapper");
+	var cc = $("#carousel_controls");
+	var prp = $("#project_process");
+	var ccl = $("#carousel_close");
+	cw.hide();
+	cc.hide();//("visibility","hidden");
+	ccl.hide();
+	prp.delegate("img", "click", function(){
+		if (interaction_locked)
+			return;
+		interaction_locked = true;
+		init_carousel(parseInt($(this).attr("rel") - 1), function() {
+			cw.show();
+			cw.css('opacity', '0.05');
+			cw.animate({'opacity':1}, 150);
+			if (carousel_content.length > 1)
+				cc.show();//css("visibility","visible");
+			ccl.show();
+			cw.delay(50).find("img").center();
+			cw.delay(50).find("iframe").center();
+			setTimeout(function(){prp.hide(); interaction_locked=false;}, 150);
+		});
+	});
+	ccl.click(function(){		
+		if (interaction_locked)
+			return;
+		interaction_locked = true;
+		cw.fadeOut(200);
+		ccl.hide();
+		cc.css("visibility","hidden");
+		setTimeout(function(){
+			prp.show(); 
+			interaction_locked = false;
+			cc.hide();
+			cc.css("visibility","visible");
+		}, 200);
+	});
+})
+</script>
+{% endblock %}

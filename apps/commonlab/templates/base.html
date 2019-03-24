@@ -1,0 +1,78 @@
+<!doctype html>
+{% load url from future %}
+{% load tags %}
+{% url 'projects' as projects_url %}
+{% url 'people' as people_url %}
+{% url 'partners' as partners_url %}
+{% url 'contact' as contact_url %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+	<meta name="description" content="{% block meta_description %}CommonLab. Design for change.{% endblock %}"/>
+	<meta name="keywords" content="commonlab design change {% block meta_keywords %}{% endblock %}"/>
+	<title>CommonLab {% block title_suffix %}{% endblock %}</title>
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/reset.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/styles.css" type="text/css" media="screen" />
+	<script src="{{ STATIC_URL }}js/cufon.js" type="text/javascript"></script>
+	<script src="{{ STATIC_URL }}js/knockout.font.js" type="text/javascript"></script>	
+	<script type="text/javascript">
+		Cufon.replace('h1, h2', {fontFamily:'KnockoutFeatherweight', textShadow: '-2px 2px rgba(0,0,0,.25)', letterSpacing: 1});
+		Cufon.replace('.display_copy_font', {fontFamily:'KnockoutMiddleweight'});
+	</script>
+	{% block header_content %}{% endblock %}
+</head>
+<body>
+	<div id="navigation">
+		<ul class="shell clearfix">
+			<li><a href="{% url 'home' %}" id="nav_logo"></a></li>
+			<li id="nav_projects_btn" class="{% active request projects_url %}">
+				<a href="{% url 'projects' %}" class="nav_btn">Projects</a>
+			</li>
+			<li id="nav_people_btn" class="{% active request people_url %}">
+				<a href="{% url 'people' %}" class="nav_btn">People</a>
+			</li>
+			<li id="nav_partners_btn" class="{% active request partners_url %}">
+				<a href="{% url 'partners' %}" class="nav_btn">Partnerships</a>
+			</li>
+			<li id="nav_contact_btn"><a href="{% url 'contact' %}" class="{% active request people_url %}">Contact</a></li>
+			<li><a href="http://www.google.com" rel="external" id="google_icon"></a></li>
+			<li><a href="http://www.facebook.com" rel="external" id="facebook_icon"></a></li>
+			<li><a href="http://www.twitter.com" rel="external" id="twitter_icon"></a></li>			
+			<li><span id="nav_menu_btn"><span id="nav_menu_sign">+</span> Menu</span></li>
+		</ul>
+	</div>
+	<div id="subnavigation" class="clearfix">
+		<div id="subnav_projects" class="subnav_category inner_shell clearfix">
+			<!-- categories -->
+			{% for category in projectcategory_list.all %}
+			{% cycle '<ul class="subnav_cats">' '' '' '' '' %}
+				<li><a href="#" class="{% for project in category.projects.all %}project_{{ project.pk }} {% endfor %}">{{ category.name }}</a></li>	
+			{% cycle '' '' '' '' '</ul>' %}
+			{% if forloop.last and not forloop.counter|divisibleby:"5" %}
+			</ul>
+			{% endif %}
+			{% endfor %}
+			<!-- links -->
+			{% for project in project_list.all %}
+			{% cycle '<ul class="subnav_links">' '' '' '' '' %}
+				<li><a href="{% url 'projects' %}{{ project.slug }}/" id="project_{{ project.pk }}" class="{% for affiliate in project.affiliates.all %}project_{{ affiliate.pk }} {% endfor %}">{{ project.name }}</a></li>	
+			{% cycle '' '' '' '' '</ul>' %}
+			{% if forloop.last and not forloop.counter|divisibleby:"5" %}
+			</ul>
+			{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+	<div id="main_content_wrapper">
+	<div id="main_content"><div class="shell">
+		{% block main_content %}{% endblock %}
+	</div></div>
+	</div>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript"></script>
+	<script src="{{ STATIC_URL }}js/jquery-ui.min.js" type="text/javascript"></script>
+	<script src="{{ STATIC_URL }}js/commonlab.js" type="text/javascript"></script>	
+	<script type="text/javascript">Cufon.now();</script>
+	{% block extra_js %}{% endblock %}
+	<!-- google analytics goes here -->
+</body>
+</html>

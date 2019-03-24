@@ -1,0 +1,13 @@
+django==1.3
+django-grappelli==2.3.2
+beautifulsoup
+Markdown
+
+-e git://github.com/carbonXT/django-html-image.git@d049cdce5c7f94cc226dda24a71de2df7d356a30#egg=django-html-image
+-e git://github.com/carbonXT/django-basic-apps.git@bccd2587b08972e6b601d48e361956a7e05d0423#egg=django-basic-apps
+
+# these need to be enabled for dev environment
+# django-debug-toolbar==0.8.5
+# Werkzeug==0.6.2
+# django-extensions==0.6
+
